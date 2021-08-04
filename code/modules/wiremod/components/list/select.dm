@@ -8,6 +8,8 @@
 	display_desc = "A component used with USB cables that can perform select queries on a list based on the column name selected. The values are then compared with the comparison input."
 	circuit_flags = CIRCUIT_FLAG_INPUT_SIGNAL|CIRCUIT_FLAG_OUTPUT_SIGNAL
 
+	var/datum/port/input/option/comparison_options
+
 	/// The list to perform the filter on
 	var/datum/port/input/received_table
 
@@ -32,7 +34,7 @@
 		COMP_COMPARISON_LESS_THAN_OR_EQUAL,
 		COMP_COMPARISON_CONTAINS,
 	)
-	options = component_options
+	comparison_options = add_option_port("Comparison Options", component_options)
 
 /obj/item/circuit_component/select/Initialize()
 	. = ..()
@@ -51,6 +53,8 @@
 
 /obj/item/circuit_component/select/input_received(datum/port/input/port)
 	. = ..()
+	var/current_option = comparison_options.input_value
+
 	switch(current_option)
 		if(COMP_COMPARISON_EQUAL, COMP_COMPARISON_NOT_EQUAL)
 			if(current_type != PORT_TYPE_ANY)

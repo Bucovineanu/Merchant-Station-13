@@ -8,6 +8,7 @@
 	display_desc = "A component that checks the type of its input."
 
 	input_port_amount = 1
+	var/datum/port/input/option/typecheck_options
 
 GLOBAL_LIST_INIT(comp_typecheck_options, list(
 	PORT_TYPE_STRING,
@@ -27,7 +28,7 @@ GLOBAL_LIST_INIT(comp_typecheck_options, list(
 		COMP_TYPECHECK_MOB,
 		COMP_TYPECHECK_HUMAN,
 	)
-	options = component_options
+	typecheck_options = add_option_port("Typecheck Options", component_options)
 
 /obj/item/circuit_component/compare/typecheck/do_comparisons(list/ports)
 	if(!length(ports))
@@ -37,7 +38,7 @@ GLOBAL_LIST_INIT(comp_typecheck_options, list(
 	// We're only comparing the first port/value. There shouldn't be any more.
 	var/datum/port/input/input_port = ports[1]
 	var/input_val = input_port.input_value
-	switch(current_option)
+	switch(typecheck_options.input_value)
 		if(PORT_TYPE_STRING)
 			return istext(input_val)
 		if(PORT_TYPE_NUMBER)
